@@ -38,6 +38,7 @@ model Driver {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   documents  KycDocument[]
+  location DriverLocation?
 }
 
 enum KycStatus{
@@ -62,4 +63,13 @@ enum DocType{
   DRIVING_LICENSE
   VEHICLE_RC
   INSURANCE
+}
+
+model DriverLocation{
+  id        String    @id @default(uuid())
+  driverId  String    @unique
+  driver   Driver    @relation(fields:[driverId],references:[id])
+  latitude  Float
+  longitude Float
+  updatedAt DateTime  @updatedAt
 }
