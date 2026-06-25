@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  phone     String   @unique
+  password  String
+  role      Role     @default(RIDER)
+  isActive  Boolean  @default(true)
+  isBanned  Boolean  @default(false)
+  rating    Float    @default(5.0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  driver Driver?
+}
+
+enum Role {
+  RIDER
+  DRIVER
+  ADMIN
+  SUPER_ADMIN
+}
+
+model Driver {
+  id       String      @id @default(uuid())
+  userId   String      @unique
+  user      User       @relation(fields: [userId], references: [id])
+  kycStatus KycStatus   @default(PENDING)
+  isVerified Boolean    @default(false)
+  isOnline Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  documents  KycDocument[]
+}
+
+enum KycStatus{
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model KycDocument {
+  id           String    @id @default(uuid())
+  driverId     String    
+  driver       Driver    @relation(fields:[driverId],references:[id])
+  type         DocType   
+  fileUrl      String
+  status       KycStatus  @default(PENDING)
+  rejectionReason String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+enum DocType{
+  DRIVING_LICENSE
+  VEHICLE_RC
+  INSURANCE
+}
