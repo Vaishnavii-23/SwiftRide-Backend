@@ -5,6 +5,8 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const authRoutes = require('./routes/auth.routes')
 const kycRoutes = require('./routes/kyc.routes')
+const locationRoutes = require('./routes/location.routes')
+
 
 const app = express();
 
@@ -14,4 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/auth',authRoutes);
 app.use('/api/kyc',kycRoutes)
+app.use('/api/location', locationRoutes)
+
+
 module.exports = app;
