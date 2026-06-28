@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const authRoutes = require('./routes/auth.routes')
 const kycRoutes = require('./routes/kyc.routes')
 const locationRoutes = require('./routes/location.routes')
+const rideRoutes = require('./routes/ride.routes')
 
 
 const app = express();
@@ -17,6 +18,6 @@ app.use(express.json());
 app.use('/api/auth',authRoutes);
 app.use('/api/kyc',kycRoutes)
 app.use('/api/location', locationRoutes)
-
+app.use('/api/ride',rideRoutes)
 
 module.exports = app;
