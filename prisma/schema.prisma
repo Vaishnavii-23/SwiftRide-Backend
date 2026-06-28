@@ -19,6 +19,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   driver Driver?
+  riderRides Ride[]    @relation("RiderRides")
 }
 
 enum Role {
@@ -39,6 +40,7 @@ model Driver {
   updatedAt DateTime @updatedAt
   documents  KycDocument[]
   location DriverLocation?
+  rides Ride[]
 }
 
 enum KycStatus{
@@ -72,4 +74,32 @@ model DriverLocation{
   latitude  Float
   longitude Float
   updatedAt DateTime  @updatedAt
+}
+
+model Ride{
+  id           String      @id @default(uuid())
+  riderId      String      
+  rider        User        @relation("RiderRides",fields:[riderId],references:[id])
+  driverId     String?
+  driver       Driver?     @relation(fields:[driverId], references :[id])
+  status       RideStatus @default(REQUESTED)
+  pickupLat    Float
+  pickupLng    Float
+  dropoffLat    Float
+  dropoffLng    Float
+  fare         Float?
+  distance     Float?
+  pickupAddress String
+  dropoffAddress String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+enum RideStatus{
+  REQUESTED
+  ACCEPTED
+  DRIVER_ARRIVING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
 }
