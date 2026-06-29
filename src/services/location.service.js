@@ -1,11 +1,28 @@
 const prisma = require('../config/db')
+const { clients } = require('../config/websocket')
 
 const updateDriverLocation = async (driverId, latitude, longitude) => {
-  return await prisma.driverLocation.upsert({
+  const location =  await prisma.driverLocation.upsert({
     where: { driverId },
     update: { latitude, longitude },
     create: { driverId, latitude, longitude }
   })
+  const ride = await prisma.ride.findFirst({
+    where:{
+      driverId,
+      status:{notIn:['COMPLETED','CANCELLED']}
+    }
+  })
+  if(ride){
+    const riderWs = clients.get(ride.riderId)
+  if(riderWs){
+    riderWs.send(JSON.stringify({
+      type:'location',
+      latitude,
+      longitude
+    }))
+  }
+} return location
 }
 
 const findNearestDrivers = async (latitude, longitude, radiusKm = 5) => {
