@@ -1,5 +1,5 @@
-const {requestRide} = require('../services/ride.service')
-
+const {requestRide,acceptRide,startRide,completeRide} = require('../services/ride.service')
+const prisma = require('../config/db')
 
 const requestRideController = async(req,res)=>{
     try{
@@ -16,5 +16,51 @@ const requestRideController = async(req,res)=>{
     catch(error){
         return res.status(400).json({message:error.message})    }
 } 
+const acceptRideController = async(req,res)=>{
+    try{
+        const {rideId} = req.body
+        const userId = req.user.userId
+        const driver = await prisma.driver.findUnique({ where: { userId } })
+        const updatedRide =await acceptRide(rideId,driver.id)
+        return res.status(201).json({
+            message : 'Ride Accepted Successfully',
+            ride:updatedRide
+        })
+    }
+    catch(error){
+        return res.status(400).json({message:error.message})
+    }
+}
 
-module.exports = {requestRideController}
+const startRideController = async(req,res)=>{
+    try{
+        const {rideId} = req.body
+        const userId = req.user.userId
+        const driver = await prisma.driver.findUnique({ where: { userId } })
+        const updatedRide =await startRide(rideId,driver.id)
+        return res.status(201).json({
+            message : 'Ride Started Successfully',
+            ride:updatedRide
+        })
+    }
+    catch(error){
+        return res.status(400).json({message:error.message})
+    }
+}
+
+const completeRideController = async(req,res)=>{
+    try{
+        const {rideId} = req.body
+        const userId = req.user.userId
+        const driver = await prisma.driver.findUnique({ where: { userId } })
+        const updatedRide =await completeRide(rideId,driver.id)
+        return res.status(201).json({
+            message : 'Ride Completed Successfully',
+            ride:updatedRide
+        })
+    }
+    catch(error){
+        return res.status(400).json({message:error.message})
+    }
+}
+module.exports = {requestRideController,acceptRideController,startRideController,completeRideController}
