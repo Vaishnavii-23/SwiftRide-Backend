@@ -71,7 +71,9 @@ const startRide = async (rideId,driverId)=>{
 
     const updatedRide = await prisma.ride.update({
         where:{id:rideId},
-        data:{status:"IN_PROGRESS"}
+        data:{status:"IN_PROGRESS",
+            startedAt: new Date()
+        }
     })
     return updatedRide
 }
@@ -87,10 +89,37 @@ const completeRide = async (rideId,driverId)=>{
     if(!ride){
         throw new Error('Ride not found or not in progress yet')
     }
+    
+    //calculate duratio in minutes
+    const duration = (new Date()-new Date(ride.startedAt))/1000/60
 
+    //calculate distance using PostGIS
+    const distanceResult = await prisma.$queryRaw`
+    SELECT ST_Distance(
+    ST_MakePoint(${ride.pickupLng},${ride.pickupLat})::geography,
+    ST_MakePoint(${ride.dropoffLng},${ride.dropoffLat})::geography
+    )/1000 AS distance_km`
+    
+    const distance = Number(distanceResult[0].distance_km)
+
+    //get surge multiplier
+    const surgeZone = await prisma.surgeZone.findUnique({
+        where:{zoneId: 'pune-central'}
+    })
+    const surgeMultiplier = surgeZone ? surgeZone.surgeMulti:1.0
+
+    //calculate fare
+    const baseFare = 50
+    const perKmRate = 12
+    const perMinuteRate = 2
+    const fare = (baseFare+(perKmRate*distance)+(perMinuteRate*duration))*surgeMultiplier
     const updatedRide = await prisma.ride.update({
         where:{id:rideId},
-        data:{status:"COMPLETED"}
+        data:{
+            status:"COMPLETED", 
+            completedAt: new Date(),
+            fare:Math.round(fare),
+        distance:Math.round(distance*100)/100}
     })
     return updatedRide
 }
