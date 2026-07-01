@@ -103,3 +103,12 @@ enum RideStatus{
   COMPLETED
   CANCELLED
 }
+
+model SurgeZone{
+  id            String      @id @default(uuid())
+  zoneId        String      @unique   
+  surgeMulti    Float       @default(1.0)
+  demandCount   Float       
+  supplyCount   Float
+  updatedAt     DateTime    @updatedAt
+}

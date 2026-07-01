@@ -1,15 +1,19 @@
 require('dotenv').config()
 const app = require('./app')
-const redis = require('./config/redis')
+const {redis} = require('./config/redis')
 const http = require('http')
 const { WebSocketServer } = require('ws')
 const jwt = require('jsonwebtoken')
 const { clients } = require('./config/websocket')
+const {scheduleSurgeUpdate} = require('./jobs/surge.job')
+const {surgeWorker} = require('./jobs/worker')
+
 
 const PORT = process.env.PORT || 3000
 
 async function startServer() {
   await redis.connect()
+  await scheduleSurgeUpdate()
   console.log('connected to redis')
 
   const server = http.createServer(app)
