@@ -9,4 +9,6 @@ router.post('/request',authenticate,authorize("RIDER"),requestRideController)
 router.patch('/accept',authenticate,authorize("DRIVER"),acceptRideController)
 router.patch('/start',authenticate,authorize("DRIVER"),startRideController)
 router.patch('/complete',authenticate,authorize("DRIVER"),completeRideController)
+
+
 module.exports = router

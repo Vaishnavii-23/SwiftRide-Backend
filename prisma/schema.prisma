@@ -20,6 +20,8 @@ model User {
   updatedAt DateTime @updatedAt
   driver Driver?
   riderRides Ride[]    @relation("RiderRides")
+  givenRatings     Rating[]  @relation("RaterRatings")
+  receivedRatings  Rating[]  @relation("RateeRatings")
 }
 
 enum Role {
@@ -95,6 +97,7 @@ model Ride{
   updatedAt    DateTime    @updatedAt
   startedAt  DateTime?
   completedAt DateTime?
+  ratings      Rating[]
 }
 
 enum RideStatus{
@@ -113,4 +116,18 @@ model SurgeZone{
   demandCount   Float       
   supplyCount   Float
   updatedAt     DateTime    @updatedAt
+}
+
+model Rating{
+  id            String       @id @default(uuid())
+  rideId        String   
+  ride          Ride         @relation(fields: [rideId], references: [id])    
+  raterId       String
+  rater         User         @relation("RaterRatings", fields: [raterId], references: [id])
+  rateeId       String
+  ratee         User         @relation("RateeRatings", fields: [rateeId], references: [id])
+  score         Float        @default(0)
+  comment       String?       
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 }

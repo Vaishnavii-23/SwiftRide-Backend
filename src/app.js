@@ -8,6 +8,7 @@ const kycRoutes = require('./routes/kyc.routes')
 const locationRoutes = require('./routes/location.routes')
 const rideRoutes = require('./routes/ride.routes')
 const surgeRoutes = require('./routes/surge.routes')
+const ratingRoutes  = require('./routes/rating.routes')
 
 const app = express();
 
@@ -20,5 +21,6 @@ app.use('/api/kyc',kycRoutes)
 app.use('/api/location', locationRoutes)
 app.use('/api/ride',rideRoutes)
 app.use('/api/surge',surgeRoutes)
+app.use('/api/rating',ratingRoutes)
 
 module.exports = app;
