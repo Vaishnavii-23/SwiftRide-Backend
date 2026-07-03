@@ -1,5 +1,5 @@
 const express = require('express')
-const {registerUser,loginUser} = require('../controllers/auth.controller')
+const {registerUser,loginUser,refreshTokenController} = require('../controllers/auth.controller')
 const {authenticate,authorize} = require('../middlewares/auth.middleware')
 
 
@@ -13,5 +13,6 @@ router.get('/me',authenticate,(req,res)=>{
 router.get('/admin',authenticate,authorize('ADMIN','SUPER_ADMIN'),(req,res)=>{
     res.status(200).json({message: 'Welcome Admin'})
 })
+router.post('/refresh',refreshTokenController)
 
 module.exports = router

@@ -53,4 +53,21 @@ const login = async (email,password)=>{
     )
     return {user,accessToken,refreshToken}
 }
-module.exports = {register,login}
+const refreshAccessToken = async (refreshToken)=>{
+    const decoded = jwt.verify(refreshToken,process.env.JWT_REFRESH_SECRET)
+    const user = await prisma.user.findUnique({
+        where:{id:decoded.userId}
+    })
+    if(!user){
+        throw new Error('User not found')
+    }
+    const accessToken = jwt.sign(
+        {userId : user.id,role: user.role},
+        process.env.JWT_SECRET,
+        {expiresIn: '15m'}
+    )
+    return {user,accessToken}
+}
+
+
+module.exports = {register,login,refreshAccessToken}

@@ -1,4 +1,4 @@
-const {register, login} = require('../services/auth.service')
+const {register, login,refreshAccessToken} = require('../services/auth.service')
 
 const registerUser = async (req,res) =>{
     try{
@@ -44,4 +44,27 @@ const loginUser = async(req,res)=>{
         return res.status(400).json({message: error.message})
     }
 }
-module.exports = {registerUser, loginUser}
+
+const refreshTokenController = async(req,res)=>{
+    try{
+        const {refreshToken} = req.body
+        if(!refreshToken){
+            return res.status(400).json({message:'Refresh token is required'})
+        }
+        const {user,accessToken} = await refreshAccessToken(refreshToken)
+        return res.status(200).json({
+            message: 'Access token refreshed successfully',
+            accessToken,
+            user:{
+                id:user.id,
+                email:user.email,
+                phone:user.phone,
+                role:user.role
+            }
+        })
+    } catch (error){
+        return res.status(400).json({message: error.message})
+    }
+}
+
+module.exports = {registerUser, loginUser, refreshTokenController}
