@@ -1,27 +1,32 @@
 const {uploadDocument, getDriverDocuments,reviewDocument} = require('../services/kyc.service')
 const prisma = require('../config/db')
 
-const uploadDoc = async (req,res)=>{
-    try{
-        const{type,fileUrl}= req.body
-        const userId = req.user.userId
-        const driver = await prisma.driver.findUnique({
-            where:{userId}
-        })
-        if(!driver){
-            return res.status(404).json({message:'Driver profile not found'})
-        }
+const uploadDoc = async (req, res) => {
+  try {
+    const { type } = req.body
+    const userId = req.user.userId
 
-        const document = await uploadDocument(driver.id,type,fileUrl)
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' })
+    }
 
-        return res.status(201).json({
-            message:'Document uploaded successfully',
-            document
-        })
+    const fileUrl = req.file.path
+
+    const driver = await prisma.driver.findUnique({ where: { userId } })
+
+    if (!driver) {
+      return res.status(404).json({ message: 'Driver profile not found' })
     }
-    catch(error){
-        return res.status(400).json({message:error.message})
-    }
+
+    const document = await uploadDocument(driver.id, type, fileUrl)
+
+    return res.status(201).json({
+      message: 'Document uploaded successfully',
+      document
+    })
+  } catch (error) {
+    return res.status(400).json({ message: error.message })
+  }
 }
 
 const getDocs = async (req,res)=>{
