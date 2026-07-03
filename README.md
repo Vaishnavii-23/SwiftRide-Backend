@@ -1,4 +1,4 @@
-# SwiftRide Backend 🚗
+# SwiftRide Backend 
 
 A production-grade ride-hailing backend with an integrated **Safety Routing Engine** — built with Node.js, PostgreSQL, PostGIS, Redis, WebSockets, and BullMQ.
 
