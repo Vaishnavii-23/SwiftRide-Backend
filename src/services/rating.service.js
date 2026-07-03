@@ -1,6 +1,6 @@
 const prisma = require('../config/db')
 
-const submitRating = async (rideId,raterId,rating,comment)=>{
+const submitRating = async (rideId,raterId,rating,comment,safetyScore)=>{
     const ride = await prisma.ride.findUnique({
         where:{id:rideId}
     })
@@ -37,9 +37,16 @@ const submitRating = async (rideId,raterId,rating,comment)=>{
                 raterId,
                 rateeId,
                 score: rating,
-            comment
+                comment,
         }
+        
     })
+            if (safetyScore) {
+            await prisma.ride.update({
+                where: { id: rideId },
+                data: { safetyScore }
+            })
+        }
     const allRatings = await prisma.rating.findMany({
         where:{rateeId}
     })

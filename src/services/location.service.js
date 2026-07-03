@@ -54,4 +54,28 @@ const findNearestDrivers = async (latitude, longitude, radiusKm = 5) => {
   return drivers
 }
 
-module.exports = { updateDriverLocation, findNearestDrivers }
+const goOnline = async (userId) =>{
+  const driver = await prisma.driver.findUnique({
+    where :{userId}
+  })
+  if (!driver.isVerified) throw new Error('You must complete KYC verification before going online')
+  await prisma.driver.update({ where: { id: driver.id }, data: { isOnline: true } })
+}
+
+const goOffline = async (userId) => {
+  const driver = await prisma.driver.findUnique({ where: { userId } })
+  
+  // check first
+  const activeRide = await prisma.ride.findFirst({
+    where: {
+      driverId: driver.id,
+      status: { notIn: ['COMPLETED', 'CANCELLED'] }
+    }
+  })
+  if (activeRide) throw new Error('Cannot go offline while on an active ride')
+  
+  // then update
+  await prisma.driver.update({ where: { id: driver.id }, data: { isOnline: false } })
+}
+
+module.exports = { updateDriverLocation, findNearestDrivers, goOnline, goOffline }

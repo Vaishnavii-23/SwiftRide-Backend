@@ -1,13 +1,13 @@
-const {requestRide,acceptRide,startRide,completeRide} = require('../services/ride.service')
+const {requestRide,acceptRide,startRide,completeRide,getRideHistory} = require('../services/ride.service')
 const prisma = require('../config/db')
 
 const requestRideController = async(req,res)=>{
     try{
-        const {pickupLat,pickupLng,dropoffLat,dropoffLng,pickupAddress,dropoffAddress} = req.body
+        const {pickupLat,pickupLng,dropoffLat,dropoffLng,pickupAddress,dropoffAddress,routeType} = req.body
         const riderId = req.user.userId
         
 
-        const newRide = await requestRide(riderId,pickupLat,pickupLng,dropoffLat,dropoffLng,pickupAddress,dropoffAddress)
+        const newRide = await requestRide(riderId,pickupLat,pickupLng,dropoffLat,dropoffLng,pickupAddress,dropoffAddress,routeType)
         return res.status(201).json({
             message:'Ride Requested Successfully',
             ride:newRide
@@ -63,4 +63,19 @@ const completeRideController = async(req,res)=>{
         return res.status(400).json({message:error.message})
     }
 }
-module.exports = {requestRideController,acceptRideController,startRideController,completeRideController}
+
+const getRideHistoryController = async(req,res)=>{
+    try{
+        const userId = req.user.userId
+        const rideHistory = await getRideHistory(userId,req.user.role)
+        return res.status(200).json({
+            message : 'Ride History Retrieved Successfully',
+            rideHistory
+        })
+    }
+    catch(error){
+        return res.status(400).json({message:error.message})
+    }
+}
+
+module.exports = {requestRideController,acceptRideController,startRideController,completeRideController,getRideHistoryController}

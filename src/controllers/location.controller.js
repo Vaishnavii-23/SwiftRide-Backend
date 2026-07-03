@@ -1,4 +1,4 @@
-const {updateDriverLocation,findNearestDrivers} = require('../services/location.service')
+const {updateDriverLocation,findNearestDrivers,goOnline,goOffline} = require('../services/location.service')
 const prisma = require('../config/db')
 
 const updateLocation = async (req,res) =>{
@@ -65,4 +65,38 @@ const getNearestDrivers = async (req,res)=>{
     }
 }
 
-module.exports ={updateLocation,getNearestDrivers}
+const driverGoOnline = async(req,res)=>{
+    try{
+        const userId = req.user.userId
+        const driver = await prisma.driver.findUnique({
+            where:{userId}
+        })
+        if(!driver){
+            return res.status(404).json({message:'Driver profile not found'})
+        }
+        await goOnline(userId)
+        return res.status(200).json({message:'Driver is now online'})
+    }
+    catch(error){
+        return res.status(400).json({message:error.message})
+    }
+}
+
+const driverGoOffline = async(req,res)=>{
+    try{
+        const userId = req.user.userId
+        const driver = await prisma.driver.findUnique({
+            where:{userId}
+        })
+        if(!driver){
+            return res.status(404).json({message:'Driver profile not found'})
+        }
+        await goOffline(userId)
+        return res.status(200).json({message:'Driver is now offline'})
+    }
+    catch(error){
+        return res.status(400).json({message:error.message})
+    }
+}
+
+module.exports ={updateLocation,getNearestDrivers,driverGoOnline,driverGoOffline}

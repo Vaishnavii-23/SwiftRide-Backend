@@ -2,7 +2,7 @@ const prisma  = require('../config/db')
 const { findNearestDrivers } = require('./location.service')
 
 
-const requestRide  = async (riderId,pickupLat,pickupLng,dropoffLat,dropoffLng,pickupAddress, dropoffAddress) =>{
+const requestRide  = async (riderId,pickupLat,pickupLng,dropoffLat,dropoffLng,pickupAddress, dropoffAddress,routeType = 'FASTEST') =>{
     const user = await prisma.user.findUnique({
         where:{id:riderId}
     })
@@ -33,7 +33,8 @@ const requestRide  = async (riderId,pickupLat,pickupLng,dropoffLat,dropoffLng,pi
             dropoffLat,
             dropoffLng,
             pickupAddress,
-            dropoffAddress
+            dropoffAddress,
+            routeType
         }
     }) 
 }
@@ -124,5 +125,21 @@ const completeRide = async (rideId,driverId)=>{
     return updatedRide
 }
 
+const getRideHistory = async (userId,role)=>{
+    let  whereClause 
+    if(role === "RIDER"){
+        whereClause = {riderId:userId}
+    } else {
+        const driver = await prisma.driver.findUnique({
+            where: { userId }
+        })
+        whereClause = { driverId: driver.id }
+    }
+    const rideHistory  = await prisma.ride.findMany({
+        where:whereClause,
+        orderBy:{createdAt:'desc'}
+    })
+    return rideHistory
+}
 
-module.exports = {requestRide, acceptRide, startRide, completeRide}
+module.exports = {requestRide, acceptRide, startRide, completeRide, getRideHistory}

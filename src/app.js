@@ -10,6 +10,7 @@ const rideRoutes = require('./routes/ride.routes')
 const surgeRoutes = require('./routes/surge.routes')
 const ratingRoutes  = require('./routes/rating.routes')
 const adminRoutes = require('./routes/admin.routes')
+const safetyRoutes = require('./routes/safety.routes')
 
 const app = express();
 
@@ -24,5 +25,6 @@ app.use('/api/ride',rideRoutes)
 app.use('/api/surge',surgeRoutes)
 app.use('/api/rating',ratingRoutes)
 app.use('/api/admin',adminRoutes)
+app.use('/api/safety',safetyRoutes)
 
 module.exports = app;

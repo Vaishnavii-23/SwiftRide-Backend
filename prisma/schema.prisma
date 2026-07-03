@@ -98,6 +98,12 @@ model Ride{
   startedAt  DateTime?
   completedAt DateTime?
   ratings      Rating[]
+  routeType    RouteType    @default(FASTEST)
+  safetyScore  Float?
+}
+enum RouteType {
+  FASTEST
+  SAFEST
 }
 
 enum RideStatus{
