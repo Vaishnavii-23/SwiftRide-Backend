@@ -2,7 +2,7 @@
 
 A production-grade ride-hailing backend with an integrated **Safety Routing Engine** — built with Node.js, PostgreSQL, PostGIS, Redis, WebSockets, and BullMQ.
 
-> SwiftRide is not just an Uber clone. It extends the core ride-hailing platform with a crowd-sourced safety routing system that scores routes based on user reviews, nearby police stations, hospitals, and crime-prone areas — helping riders choose between the fastest and safest route.
+> SwiftRide is not an ride hailing app. It extends the core ride-hailing platform with a crowd-sourced safety routing system that scores routes based on user reviews, nearby police stations, hospitals, and crime-prone areas — helping riders choose between the fastest and safest route.
 
 ---
 
