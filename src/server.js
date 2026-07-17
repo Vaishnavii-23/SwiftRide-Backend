@@ -18,9 +18,25 @@ async function startServer() {
 
   const server = http.createServer(app)
   const wss = new WebSocketServer({ server })
+  const heartbeat = setInterval(() => {
+  wss.clients.forEach((ws) => {
+      if (ws.isAlive === false) {
+        clients.forEach((value, key) => {
+          if (value === ws) clients.delete(key)
+        })
+        return ws.terminate()
+      }
+      ws.isAlive = false
+      ws.ping()
+    })
+  }, 10000)
+
+  wss.on('close', () => clearInterval(heartbeat))
 
   wss.on('connection', (ws) => {
     console.log('New WebSocket connection')
+    ws.isAlive = true
+    ws.on('pong', () => { ws.isAlive = true })
 
     ws.on('message', (message) => {
       try {

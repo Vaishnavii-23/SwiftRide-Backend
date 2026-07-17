@@ -11,6 +11,6 @@ router.post('/request',authenticate,authorize("RIDER"),validate(rideRequestSchem
 router.patch('/accept',authenticate,authorize("DRIVER"),validate(rideRequestSchema),acceptRideController)
 router.patch('/start',authenticate,authorize("DRIVER"),validate(rideRequestSchema),startRideController)
 router.patch('/complete',authenticate,authorize("DRIVER"),validate(rideRequestSchema),completeRideController)
-router.get('/history',authenticate,validate(rideRequestSchema),getRideHistoryController)
+router.get('/history',authenticate,getRideHistoryController)
 
 module.exports = router

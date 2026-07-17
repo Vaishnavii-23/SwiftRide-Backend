@@ -1,0 +1,1 @@
+export { AdminKYCReview } from "./AdminKYCReview";
