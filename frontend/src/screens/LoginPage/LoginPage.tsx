@@ -45,7 +45,7 @@ export const LoginPage = () => {
         </p>
       </div>
 
-      <Card className="w-full max-w-md rounded-2xl border-cream-300 bg-white shadow-md animate-scale-in">
+      <Card className="w-full max-w-md rounded-2xl border-gray-300 bg-white shadow-md animate-scale-in">
         <CardContent className="p-8">
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             {error && (
@@ -56,7 +56,7 @@ export const LoginPage = () => {
             )}
 
             <div>
-              <label htmlFor="email" className="font-sans text-xs font-bold uppercase tracking-wider text-terracotta-600">
+              <label htmlFor="email" className="font-sans text-xs font-bold uppercase tracking-wider text-gray-500">
                 Email
               </label>
               <input
@@ -66,11 +66,11 @@ export const LoginPage = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="mt-2 h-12 w-full rounded-xl border border-cream-400 bg-cream-100 px-4 font-sans text-sm text-charcoal outline-none focus:border-sage-500 placeholder:text-muted-foreground"
+                className="mt-2 h-12 w-full rounded-xl border border-gray-300 bg-white px-4 font-sans text-sm text-charcoal outline-none focus:border-gray-500 placeholder:text-muted-foreground"
               />
             </div>
             <div>
-              <label htmlFor="password" className="font-sans text-xs font-bold uppercase tracking-wider text-terracotta-600">
+              <label htmlFor="password" className="font-sans text-xs font-bold uppercase tracking-wider text-gray-500">
                 Password
               </label>
               <input
@@ -80,14 +80,14 @@ export const LoginPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="mt-2 h-12 w-full rounded-xl border border-cream-400 bg-cream-100 px-4 font-sans text-sm text-charcoal outline-none focus:border-sage-500 placeholder:text-muted-foreground"
+                className="mt-2 h-12 w-full rounded-xl border border-gray-300 bg-white px-4 font-sans text-sm text-charcoal outline-none focus:border-gray-500 placeholder:text-muted-foreground"
               />
             </div>
 
             <Button
               type="submit"
               disabled={loading || !email || !password}
-              className="mt-2 h-auto rounded-3xl bg-sage-500 py-4 font-sans text-base font-bold text-white shadow-lg hover:bg-sage-600 disabled:opacity-50"
+              className="mt-2 h-auto rounded-3xl bg-black py-4 font-sans text-base font-bold text-white shadow-lg hover:bg-gray-900 disabled:opacity-50"
             >
               {loading ? "Logging in..." : "Log In"}
               {!loading && <ArrowRight className="h-5 w-5 ml-2" />}
@@ -96,7 +96,7 @@ export const LoginPage = () => {
 
           <p className="mt-6 text-center font-sans text-sm text-muted-foreground">
             Don't have an account?{" "}
-            <Link to="/register" className="font-bold text-sage-500 hover:underline">
+            <Link to="/register" className="font-bold text-black hover:underline">
               Sign up
             </Link>
           </p>
@@ -105,3 +105,4 @@ export const LoginPage = () => {
     </div>
   );
 };
+
