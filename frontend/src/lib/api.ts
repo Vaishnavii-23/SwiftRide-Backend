@@ -1,4 +1,4 @@
-export const API_BASE_URL = "http://localhost:3000/api";
+export const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 const ACCESS_TOKEN_KEY = "swiftride-token";
 const REFRESH_TOKEN_KEY = "swiftride-refresh-token";

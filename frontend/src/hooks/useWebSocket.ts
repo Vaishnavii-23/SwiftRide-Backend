@@ -18,8 +18,8 @@ export const useWebSocket = (onMessage?: (data: any) => void) => {
       wsRef.current.close();
     }
 
-    const ws = new WebSocket("ws://localhost:3000");
-    wsRef.current = ws;
+    const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:3000'
+    const ws = new WebSocket(WS_URL)
 
     ws.onopen = () => {
       console.log("WebSocket connection established");

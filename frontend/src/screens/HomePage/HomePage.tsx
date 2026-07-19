@@ -62,7 +62,7 @@ export const HomePage = () => {
             YOUR JOURNEY, YOUR CHOICE
           </p>
           <h1 className="mt-6 max-w-[560px] font-sans text-5xl font-black leading-tight text-black sm:text-6xl">
-            Choose the <span className="text-cyan-500 underline decoration-2 underline-offset-4">Fastest</span> or the <span className="text-teal-700 underline decoration-2 underline-offset-4">Safest</span> Route.
+            Choose the <span className="text-gray-500 underline decoration-2 underline-offset-4">Fastest</span> or the <span className="text-teal-700 underline decoration-2 underline-offset-4">Safest</span> Route.
           </h1>
           <p className="mt-6 max-w-[480px] font-sans text-lg leading-relaxed text-gray-500">
             Navigate the city on your terms. SwiftRide empowers you with real-time data to select a route optimized for speed, or one vetted for maximum safety.
