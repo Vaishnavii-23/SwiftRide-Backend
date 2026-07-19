@@ -11,7 +11,7 @@ const surgeRoutes = require('./routes/surge.routes')
 const ratingRoutes = require('./routes/rating.routes')
 const adminRoutes = require('./routes/admin.routes')
 const safetyRoutes = require('./routes/safety.routes')
-const rateLimit = require('express-rate-limit')
+const { globalLimiter } = require('./config/rateLimit')
 
 const app = express();
 
@@ -20,13 +20,7 @@ app.use(cors({
   credentials: true
 }));
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 min
-  max: 100,
-  message: 'Too Many requests from this IP, please try again after 15 minutes'
-})
-
-app.use(limiter);
+app.use(globalLimiter);
 app.use(helmet());
 app.use(morgan('dev'));
 // app.options('*', cors());

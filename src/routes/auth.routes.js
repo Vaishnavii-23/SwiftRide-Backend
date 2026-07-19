@@ -3,11 +3,12 @@ const { registerUser, loginUser, refreshTokenController } = require('../controll
 const { authenticate, authorize } = require('../middlewares/auth.middleware')
 const { validate } = require('../middlewares/validate.middleware')
 const { registerSchema, loginSchema } = require('../utils/schemas')
+const { loginLimiter } = require('../config/rateLimit')
 
 const router = express.Router()
 
-router.post('/register', validate(registerSchema), registerUser)
-router.post('/login', validate(loginSchema), loginUser)
+router.post('/register', loginLimiter, validate(registerSchema), registerUser)
+router.post('/login', loginLimiter, validate(loginSchema), loginUser)
 router.get('/me', authenticate, (req, res) => {
   res.status(200).json({ message: 'You are authenticated', user: req.user })
 })
