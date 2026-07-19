@@ -80,4 +80,37 @@ const analytics = async(req,res)=>{
     }
 }
 
-module.exports = {getAllUsers,banUser,unbanUser,analytics}
+const getActiveRides = async (req, res) => {
+    try {
+        const activeRides = await prisma.ride.findMany({
+            where: {
+                status: {
+                    in: ['REQUESTED', 'ACCEPTED', 'DRIVER_ARRIVING', 'IN_PROGRESS']
+                }
+            },
+            include: {
+                rider: true,
+                driver: {
+                    include: {
+                        user: true
+                    }
+                }
+            },
+            orderBy: { createdAt: 'desc' }
+        })
+        const onlineDriversCount = await prisma.driver.count({
+            where: { isOnline: true }
+        })
+        res.status(200).json({
+            message: 'Active rides fetched successfully',
+            data: {
+                activeRides,
+                onlineDriversCount
+            }
+        })
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+}
+
+module.exports = {getAllUsers,banUser,unbanUser,analytics,getActiveRides}

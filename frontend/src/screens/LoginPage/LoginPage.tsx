@@ -23,7 +23,8 @@ export const LoginPage = () => {
 
       // Backend returns role as uppercase: RIDER, DRIVER, ADMIN
       if (user.role === "ADMIN" || user.role === "SUPER_ADMIN") {
-        navigate("/admin");
+        setError("Admin users must log in via the /adminlogin portal.");
+        return; // Don't redirect to /admin, block them here
       } else if (user.role === "DRIVER") {
         navigate("/driver");
       } else {

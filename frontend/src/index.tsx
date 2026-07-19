@@ -40,12 +40,14 @@ import { RiderTripCompletion } from "./screens/RiderTripCompletion";
 import { RiderHistory } from "./screens/RiderHistory";
 import { RiderSafety } from "./screens/RiderSafety";
 import { RiderProfile } from "./screens/RiderProfile";
+import { RiderRideDetail } from "./screens/RiderRideDetail/RiderRideDetail";
 
 import { DriverDashboard } from "./screens/DriverDashboard";
 import { DriverKYC } from "./screens/DriverKYC";
 import { DriverIncomingRequest } from "./screens/DriverIncomingRequest";
 import { DriverNavigation } from "./screens/DriverNavigation";
 import { DriverEarnings } from "./screens/DriverEarnings";
+import { DriverProfile } from "./screens/DriverProfile/DriverProfile";
 
 import { AdminDashboard } from "./screens/AdminDashboard";
 import { AdminUserManagement } from "./screens/AdminUserManagement";
@@ -55,7 +57,7 @@ import { AdminLiveMonitoring } from "./screens/AdminLiveMonitoring";
 createRoot(document.getElementById("app") as HTMLElement).render(
   <StrictMode>
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           {/* Public */}
           <Route element={<PublicLayout />}>
@@ -68,7 +70,7 @@ createRoot(document.getElementById("app") as HTMLElement).render(
             <Route path="/register" element={<RegisterPage />} />
           </Route>
 
-          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route path="/adminlogin" element={<AdminLoginPage />} />
 
           {/* Rider (mobile-first) */}
           <Route element={<RiderLayout />}>
@@ -78,6 +80,7 @@ createRoot(document.getElementById("app") as HTMLElement).render(
             <Route path="/rider/ride" element={<RiderRideInProgress />} />
             <Route path="/rider/complete" element={<RiderTripCompletion />} />
             <Route path="/rider/history" element={<RiderHistory />} />
+            <Route path="/rider/history/:rideId" element={<RiderRideDetail />} />
             <Route path="/rider/safety" element={<RiderSafety />} />
             <Route path="/rider/profile" element={<RiderProfile />} />
           </Route>
@@ -89,6 +92,7 @@ createRoot(document.getElementById("app") as HTMLElement).render(
             <Route path="/driver/request" element={<DriverIncomingRequest />} />
             <Route path="/driver/active" element={<DriverNavigation />} />
             <Route path="/driver/earnings" element={<DriverEarnings />} />
+            <Route path="/driver/profile" element={<DriverProfile />} />
           </Route>
 
           {/* Admin (desktop-first) */}

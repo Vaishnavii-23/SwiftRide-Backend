@@ -47,7 +47,7 @@ export const RegisterPage = () => {
         </p>
       </div>
 
-      <Card className="w-full max-w-md rounded-2xl border-cream-300 bg-white shadow-md animate-scale-in">
+      <Card className="w-full max-w-md rounded-2xl border-gray-200 bg-white shadow-md animate-scale-in">
         <CardContent className="p-8">
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             {error && (
@@ -68,7 +68,7 @@ export const RegisterPage = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="mt-2 h-12 w-full rounded-xl border border-cream-400 bg-cream-100 px-4 font-sans text-sm text-charcoal outline-none focus:border-sage-500 placeholder:text-muted-foreground"
+                className="mt-2 h-12 w-full rounded-xl border border-cream-400 bg-white px-4 font-sans text-sm text-charcoal outline-none focus:border-sage-500 placeholder:text-muted-foreground"
               />
             </div>
             <div>
@@ -82,7 +82,7 @@ export const RegisterPage = () => {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="1234567890"
-                className="mt-2 h-12 w-full rounded-xl border border-cream-400 bg-cream-100 px-4 font-sans text-sm text-charcoal outline-none focus:border-sage-500 placeholder:text-muted-foreground"
+                className="mt-2 h-12 w-full rounded-xl border border-cream-400 bg-white px-4 font-sans text-sm text-charcoal outline-none focus:border-sage-500 placeholder:text-muted-foreground"
               />
             </div>
             <div>
@@ -97,7 +97,7 @@ export const RegisterPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="mt-2 h-12 w-full rounded-xl border border-cream-400 bg-cream-100 px-4 font-sans text-sm text-charcoal outline-none focus:border-sage-500 placeholder:text-muted-foreground"
+                className="mt-2 h-12 w-full rounded-xl border border-cream-400 bg-white px-4 font-sans text-sm text-charcoal outline-none focus:border-sage-500 placeholder:text-muted-foreground"
               />
             </div>
 
@@ -115,8 +115,8 @@ export const RegisterPage = () => {
                       onClick={() => setRole(opt.value)}
                       className={`flex items-center gap-3 rounded-xl border px-4 py-3 transition-colors tap-scale ${
                         role === opt.value
-                          ? "border-sage-500 bg-sage-500/5"
-                          : "border-cream-400 bg-cream-100 hover:border-sage-500/40"
+                          ? "border-sage-500 bg-black/5"
+                          : "border-cream-400 bg-white hover:border-sage-500/40"
                       }`}
                     >
                       <Icon className={`h-5 w-5 ${role === opt.value ? "text-sage-500" : "text-muted-foreground"}`} />
@@ -136,7 +136,7 @@ export const RegisterPage = () => {
             <Button
               type="submit"
               disabled={loading || !email || !phone || !password}
-              className="h-auto rounded-3xl bg-sage-500 py-4 font-sans text-base font-bold text-white shadow-lg hover:bg-sage-600 disabled:opacity-50"
+              className="h-auto rounded-3xl bg-black py-4 font-sans text-base font-bold text-white shadow-lg hover:bg-gray-800 disabled:opacity-50"
             >
               {loading ? "Creating Account..." : "Create Account"}
               {!loading && <ArrowRight className="h-5 w-5 ml-2" />}

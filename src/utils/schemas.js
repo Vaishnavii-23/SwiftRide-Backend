@@ -22,4 +22,8 @@ const rideRequestSchema = z.object({
   routeType: z.enum(['FASTEST', 'SAFEST']).optional()
 })
 
-module.exports = { registerSchema, loginSchema, rideRequestSchema }
+const rideActionSchema = z.object({
+  rideId: z.string().min(1, 'Ride ID is required')
+})
+
+module.exports = { registerSchema, loginSchema, rideRequestSchema, rideActionSchema }

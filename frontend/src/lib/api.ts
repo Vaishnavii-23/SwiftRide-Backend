@@ -54,6 +54,9 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
       "Content-Type": "application/json",
       ...(options.headers as Record<string, string>),
     };
+    if (headers["Content-Type"] === "MULTIPART_FORM_DATA_SPECIAL" || options.body instanceof FormData) {
+      delete headers["Content-Type"];
+    }
     if (authToken) {
       headers["Authorization"] = `Bearer ${authToken}`;
     }

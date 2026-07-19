@@ -42,7 +42,7 @@ export const RiderProfile = () => {
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 w-full">
       <div className="flex flex-col items-center rounded-2xl bg-white p-6 shadow-sm">
-        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-sage-500 text-2xl font-bold text-white">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-black text-2xl font-bold text-white">
           {initials}
         </div>
         <p className="mt-3 font-serif text-xl font-normal text-charcoal">{displayName}</p>
@@ -73,7 +73,7 @@ export const RiderProfile = () => {
             <button
               key={item.label}
               className={`flex w-full items-center gap-3 px-5 py-4 text-left tap-scale transition-colors hover:bg-cream-200 ${
-                i > 0 ? "border-t border-cream-300" : ""
+                i > 0 ? "border-t border-gray-200" : ""
               }`}
             >
               <Icon className="h-5 w-5 text-sage-500" />

@@ -56,15 +56,13 @@ export const HomePage = () => {
     <div className="bg-white text-black">
 
       {/* Hero */}
-      <section className="mx-auto grid w-full max-w-screen-xl grid-cols-1 items-center gap-12 px-4 pb-20 pt-14 sm:px-6 md:gap-16 md:pt-20 lg:grid-cols-2 lg:py-24">
+      <section className="mx-auto grid w-full max-w-screen-xl grid-cols-1 items-center gap-12 px-4 pb-20 pt-1 sm:px-6 md:gap-16 md:pt-8 lg:grid-cols-2 lg:py-16">
         <div className="flex flex-col items-start">
           <p className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-gray-400">
             YOUR JOURNEY, YOUR CHOICE
           </p>
           <h1 className="mt-6 max-w-[560px] font-sans text-5xl font-black leading-tight text-black sm:text-6xl">
-            Choose the <span className="text-cyan-500 underline decoration-2 underline-offset-4">Fastest</span>
-            <br />
-            or the <span className="text-teal-700 underline decoration-2 underline-offset-4">Safest</span> Route.
+            Choose the <span className="text-cyan-500 underline decoration-2 underline-offset-4">Fastest</span> or the <span className="text-teal-700 underline decoration-2 underline-offset-4">Safest</span> Route.
           </h1>
           <p className="mt-6 max-w-[480px] font-sans text-lg leading-relaxed text-gray-500">
             Navigate the city on your terms. SwiftRide empowers you with real-time data to select a route optimized for speed, or one vetted for maximum safety.
@@ -82,13 +80,13 @@ export const HomePage = () => {
             </Link>
           </div>
         </div>
-        <div className="flex justify-center lg:justify-end">
-          <div className="flex justify-center lg:justify-end">
+        <div className="flex justify-center lg:justify-end w-full">
+          <div className="flex justify-center lg:justify-end w-full h-[600px]">
             <DotLottieReact
               src="https://lottie.host/26bb5789-3aff-4111-adc9-a7a1a3da3a85/dYQrtAjQBk.json"
               loop
               autoplay
-              style={{ width: '500px', height: '500px' }}
+              style={{ width: '100%', height: '100%' }}
             />
           </div>
         </div>

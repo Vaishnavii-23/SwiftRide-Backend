@@ -65,12 +65,12 @@ export const HowItWorksPage = () => {
             return (
               <Card
                 key={step.number}
-                className="rounded-2xl border-cream-300 bg-white shadow-sm animate-fade-up"
+                className="rounded-2xl border-gray-200 bg-white shadow-sm animate-fade-up"
                 style={{ animationDelay: `${i * 0.1}s` }}
               >
                 <CardContent className="flex flex-col p-8">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-sage-500/10">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-black/10">
                       <Icon className="h-7 w-7 text-sage-500" />
                     </div>
                     <span className="font-serif text-4xl font-normal leading-none text-sage-500/30">
@@ -134,7 +134,7 @@ export const HowItWorksPage = () => {
             </p>
           </div>
           <Link to="/register">
-            <Button className="h-auto rounded-3xl bg-sage-500 px-8 py-4 font-sans text-base font-bold text-white hover:bg-sage-600">
+            <Button className="h-auto rounded-3xl bg-black px-8 py-4 font-sans text-base font-bold text-white hover:bg-gray-900">
               Create Account
               <ArrowRight className="h-5 w-5" />
             </Button>

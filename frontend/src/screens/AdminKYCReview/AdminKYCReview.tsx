@@ -1,61 +1,95 @@
-import { useState } from "react";
-import { CircleCheck as CheckCircle2, Circle as XCircle, FileCheck as FileCheckIcon, IdCard as IdCardIcon, Car as CarIcon, Clock as ClockIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CircleCheck as CheckCircle2, Circle as XCircle, FileCheck as FileCheckIcon, IdCard as IdCardIcon, Car as CarIcon, Clock as ClockIcon, AlertCircle, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
+import { kycService } from "../../services/kyc.service";
+import { AdminPendingKYC } from "../../types";
 
-interface KYCSubmission {
-  id: string;
+interface GroupedKYC {
+  driverId: string;
   driverName: string;
   email: string;
-  submittedAt: string;
-  documents: { label: string; icon: React.ComponentType<{ className?: string }>; status: "pending" | "approved" | "rejected" }[];
+  phone: string;
+  documents: AdminPendingKYC[];
 }
 
-const submissions: KYCSubmission[] = [
-  {
-    id: "kyc1",
-    driverName: "Jordan Blake",
-    email: "jordan@swiftride.app",
-    submittedAt: "2 hours ago",
-    documents: [
-      { label: "Driver's License", icon: IdCardIcon, status: "pending" },
-      { label: "Vehicle Insurance", icon: FileCheckIcon, status: "pending" },
-      { label: "Vehicle Registration", icon: CarIcon, status: "pending" },
-    ],
-  },
-  {
-    id: "kyc2",
-    driverName: "Maya Chen",
-    email: "maya@swiftride.app",
-    submittedAt: "5 hours ago",
-    documents: [
-      { label: "Driver's License", icon: IdCardIcon, status: "pending" },
-      { label: "Vehicle Insurance", icon: FileCheckIcon, status: "pending" },
-      { label: "Vehicle Registration", icon: CarIcon, status: "pending" },
-    ],
-  },
-  {
-    id: "kyc3",
-    driverName: "Liam Murphy",
-    email: "liam@swiftride.app",
-    submittedAt: "1 day ago",
-    documents: [
-      { label: "Driver's License", icon: IdCardIcon, status: "pending" },
-      { label: "Vehicle Insurance", icon: FileCheckIcon, status: "pending" },
-      { label: "Vehicle Registration", icon: CarIcon, status: "pending" },
-    ],
-  },
-];
-
 export const AdminKYCReview = () => {
-  const [reviewed, setReviewed] = useState<Record<string, "approved" | "rejected">>({});
+  const [groupedPending, setGroupedPending] = useState<GroupedKYC[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [actionLoading, setActionLoading] = useState<string | null>(null); // documentId or driverId
 
-  const handleAction = (id: string, action: "approved" | "rejected") => {
-    setReviewed((prev) => ({ ...prev, [id]: action }));
+  const loadPendingDocs = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await kycService.getPendingDocs();
+      const rawDocs = res.documents || [];
+
+      // Group flat document list by driver
+      const grouped: Record<string, GroupedKYC> = {};
+      rawDocs.forEach((doc) => {
+        const driverId = doc.driverId;
+        if (!grouped[driverId]) {
+          grouped[driverId] = {
+            driverId,
+            driverName: doc.driver?.user?.email?.split('@')[0] || "Unknown Driver",
+            email: doc.driver?.user?.email || "No Email",
+            phone: doc.driver?.user?.phone || "No Phone",
+            documents: [],
+          };
+        }
+        grouped[driverId].documents.push(doc);
+      });
+
+      setGroupedPending(Object.values(grouped));
+    } catch (err: any) {
+      console.error("Failed to load pending KYC docs:", err);
+      setError(err.message || "Failed to load pending documents.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const pending = submissions.filter((s) => !reviewed[s.id]);
-  const processed = submissions.filter((s) => reviewed[s.id]);
+  useEffect(() => {
+    loadPendingDocs();
+  }, []);
+
+  const handleAction = async (documentId: string, status: "APPROVED" | "REJECTED", reason?: string) => {
+    setActionLoading(documentId);
+    try {
+      await kycService.reviewDocument(documentId, status, reason);
+      // Reload queue
+      await loadPendingDocs();
+    } catch (err: any) {
+      console.error(`Failed to review document ${documentId}:`, err);
+      setError(err.message || "Failed to submit review.");
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const getDocIcon = (type: string) => {
+    switch (type) {
+      case "DRIVING_LICENSE":
+        return IdCardIcon;
+      case "INSURANCE":
+        return FileCheckIcon;
+      default:
+        return CarIcon;
+    }
+  };
+
+  const getDocLabel = (type: string) => {
+    switch (type) {
+      case "DRIVING_LICENSE":
+        return "Driver's License";
+      case "INSURANCE":
+        return "Vehicle Insurance";
+      default:
+        return "Vehicle Registration (RC)";
+    }
+  };
 
   return (
     <div className="px-4 py-8 sm:px-6">
@@ -65,118 +99,108 @@ export const AdminKYCReview = () => {
           Review and approve driver document submissions.
         </p>
 
+        {error && (
+          <div className="mt-4 flex items-center gap-2 rounded-xl bg-red-50 p-3 text-red-600">
+            <AlertCircle className="h-5 w-5 shrink-0" />
+            <span className="font-sans text-sm">{error}</span>
+          </div>
+        )}
+
         {/* Stats */}
-        <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="rounded-2xl bg-white p-5 shadow-sm">
             <ClockIcon className="h-6 w-6 text-terracotta-500" />
-            <p className="mt-2 font-serif text-2xl font-normal text-charcoal">{pending.length}</p>
-            <p className="font-sans text-xs text-muted-foreground">Pending Review</p>
-          </div>
-          <div className="rounded-2xl bg-white p-5 shadow-sm">
-            <CheckCircle2 className="h-6 w-6 text-sage-500" />
-            <p className="mt-2 font-serif text-2xl font-normal text-charcoal">
-              {Object.values(reviewed).filter((v) => v === "approved").length}
-            </p>
-            <p className="font-sans text-xs text-muted-foreground">Approved Today</p>
-          </div>
-          <div className="rounded-2xl bg-white p-5 shadow-sm">
-            <XCircle className="h-6 w-6 text-red-600" />
-            <p className="mt-2 font-serif text-2xl font-normal text-charcoal">
-              {Object.values(reviewed).filter((v) => v === "rejected").length}
-            </p>
-            <p className="font-sans text-xs text-muted-foreground">Rejected Today</p>
+            <p className="mt-2 font-serif text-2xl font-normal text-charcoal">{groupedPending.length}</p>
+            <p className="font-sans text-xs text-muted-foreground">Drivers Awaiting Review</p>
           </div>
         </div>
 
-        {/* Pending queue */}
-        {pending.length > 0 && (
+        {/* Grouped submissions list */}
+        {loading ? (
+          <div className="mt-8 space-y-4">
+            <div className="h-44 w-full rounded-2xl skeleton" />
+            <div className="h-44 w-full rounded-2xl skeleton" />
+          </div>
+        ) : groupedPending.length > 0 ? (
           <>
             <h2 className="mt-8 font-serif text-xl font-normal text-charcoal">Pending Submissions</h2>
             <div className="mt-4 space-y-4">
-              {pending.map((sub, i) => (
+              {groupedPending.map((sub, i) => (
                 <Card
-                  key={sub.id}
-                  className="rounded-2xl border-cream-300 bg-white shadow-sm animate-fade-up"
-                  style={{ animationDelay: `${i * 0.1}s` }}
+                  key={sub.driverId}
+                  className="rounded-2xl border-gray-200 bg-white shadow-sm animate-fade-up animate-delay-100"
                 >
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-charcoal text-sm font-bold text-white">
-                          {sub.driverName.split(" ").map((n) => n[0]).join("")}
+                          {sub.driverName.substring(0, 2).toUpperCase()}
                         </div>
                         <div>
                           <p className="font-sans text-base font-bold text-charcoal">{sub.driverName}</p>
-                          <p className="font-sans text-xs text-muted-foreground">{sub.email} · Submitted {sub.submittedAt}</p>
+                          <p className="font-sans text-xs text-muted-foreground">{sub.email} · Phone: {sub.phone}</p>
                         </div>
                       </div>
                     </div>
 
-                    {/* Documents */}
-                    <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                    {/* Pending Documents List */}
+                    <div className="mt-6 space-y-4">
                       {sub.documents.map((doc) => {
-                        const Icon = doc.icon;
+                        const Icon = getDocIcon(doc.type);
+                        const label = getDocLabel(doc.type);
                         return (
-                          <div key={doc.label} className="flex items-center gap-2 rounded-xl bg-cream-200 p-3">
-                            <Icon className="h-5 w-5 text-sage-500" />
-                            <span className="font-sans text-xs font-bold text-charcoal">{doc.label}</span>
+                          <div key={doc.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl bg-white p-4 border border-gray-200">
+                            <div className="flex items-center gap-3">
+                              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-sage-500 shadow-sm">
+                                <Icon className="h-5 w-5" />
+                              </div>
+                              <div>
+                                <span className="font-sans text-sm font-bold text-charcoal block">{label}</span>
+                                <a 
+                                  href={doc.fileUrl} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="font-sans text-xs text-sage-600 hover:underline flex items-center gap-1 mt-0.5"
+                                >
+                                  View uploaded file <ExternalLink className="h-3 w-3" />
+                                </a>
+                              </div>
+                            </div>
+                            
+                            {/* Actions on document */}
+                            <div className="flex gap-2">
+                              <Button
+                                onClick={() => handleAction(doc.id, "APPROVED")}
+                                disabled={actionLoading !== null}
+                                size="sm"
+                                className="rounded-xl bg-black px-4 font-sans text-xs font-bold text-white hover:bg-gray-900"
+                              >
+                                Approve
+                              </Button>
+                              <Button
+                                onClick={() => {
+                                  const reason = prompt("Enter rejection reason:");
+                                  if (reason) handleAction(doc.id, "REJECTED", reason);
+                                }}
+                                disabled={actionLoading !== null}
+                                variant="outline"
+                                size="sm"
+                                className="rounded-xl border-red-200 px-4 font-sans text-xs font-bold text-red-600 hover:bg-red-50"
+                              >
+                                Reject
+                              </Button>
+                            </div>
                           </div>
                         );
                       })}
                     </div>
-
-                    {/* Actions */}
-                    <div className="mt-4 flex gap-3">
-                      <Button
-                        onClick={() => handleAction(sub.id, "approved")}
-                        className="flex-1 rounded-xl bg-sage-500 py-3 font-sans text-sm font-bold text-white hover:bg-sage-600"
-                      >
-                        <CheckCircle2 className="h-4 w-4" /> Approve
-                      </Button>
-                      <Button
-                        onClick={() => handleAction(sub.id, "rejected")}
-                        variant="outline"
-                        className="flex-1 rounded-xl border-red-200 py-3 font-sans text-sm font-bold text-red-600 hover:bg-red-50"
-                      >
-                        <XCircle className="h-4 w-4" /> Reject
-                      </Button>
-                    </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
           </>
-        )}
-
-        {/* Processed */}
-        {processed.length > 0 && (
-          <>
-            <h2 className="mt-8 font-serif text-xl font-normal text-charcoal">Recently Processed</h2>
-            <div className="mt-4 space-y-3">
-              {processed.map((sub) => (
-                <Card key={sub.id} className="rounded-2xl border-cream-300 bg-white shadow-sm opacity-70">
-                  <CardContent className="flex items-center justify-between p-5">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-charcoal text-xs font-bold text-white">
-                        {sub.driverName.split(" ").map((n) => n[0]).join("")}
-                      </div>
-                      <p className="font-sans text-sm font-bold text-charcoal">{sub.driverName}</p>
-                    </div>
-                    <span className={`flex items-center gap-1.5 rounded-full px-3 py-1 font-sans text-xs font-bold ${
-                      reviewed[sub.id] === "approved" ? "bg-sage-500/10 text-sage-500" : "bg-red-50 text-red-600"
-                    }`}>
-                      {reviewed[sub.id] === "approved" ? <CheckCircle2 className="h-3.5 w-3.5" /> : <XCircle className="h-3.5 w-3.5" />}
-                      {reviewed[sub.id]}
-                    </span>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </>
-        )}
-
-        {pending.length === 0 && processed.length === 0 && (
-          <div className="mt-8 text-center font-sans text-sm text-muted-foreground">
+        ) : (
+          <div className="mt-8 text-center font-sans text-sm text-muted-foreground py-12 bg-white rounded-2xl shadow-sm border border-gray-200">
             No KYC submissions to review.
           </div>
         )}
@@ -184,3 +208,4 @@ export const AdminKYCReview = () => {
     </div>
   );
 };
+export default AdminKYCReview;

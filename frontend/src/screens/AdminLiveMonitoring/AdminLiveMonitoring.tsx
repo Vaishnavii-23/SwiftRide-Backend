@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Car as CarIcon, MapPin as MapPinIcon, Clock as ClockIcon, Shield as ShieldIcon, Navigation as NavigationIcon } from "lucide-react";
 import { Card, CardContent } from "../../components/ui/card";
 import { SafetyScore } from "../../components/RideDetailCard";
@@ -10,12 +11,30 @@ const activeRides = [
 ];
 
 const statusColors: Record<string, string> = {
-  "In Progress": "bg-sage-500/10 text-sage-500",
+  "In Progress": "bg-black/10 text-sage-500",
   Matching: "bg-terracotta-500/10 text-terracotta-600",
   Pickup: "bg-charcoal/10 text-charcoal",
 };
 
 export const AdminLiveMonitoring = () => {
+  const [rides, setRides] = useState(activeRides);
+
+  // Simulate real-time updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRides(currentRides => 
+        currentRides.map(ride => {
+          if (ride.eta === "—") return ride;
+          const currentEta = parseInt(ride.eta);
+          if (isNaN(currentEta)) return ride;
+          // Randomly decrease ETA by 1 or stay same
+          const newEta = Math.max(1, currentEta - (Math.random() > 0.5 ? 1 : 0));
+          return { ...ride, eta: `${newEta} min` };
+        })
+      );
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div className="px-4 py-8 sm:px-6">
       <div className="mx-auto max-w-5xl">
@@ -24,8 +43,8 @@ export const AdminLiveMonitoring = () => {
             <h1 className="font-serif text-3xl font-normal text-charcoal">Live Ride Monitoring</h1>
             <p className="mt-1 font-sans text-sm text-muted-foreground">Real-time view of all active rides.</p>
           </div>
-          <div className="flex items-center gap-2 rounded-full bg-sage-500/10 px-4 py-2">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-sage-500" />
+          <div className="flex items-center gap-2 rounded-full bg-black/10 px-4 py-2">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-black" />
             <span className="font-sans text-sm font-bold text-sage-500">Live</span>
           </div>
         </div>
@@ -34,7 +53,7 @@ export const AdminLiveMonitoring = () => {
         <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div className="rounded-2xl bg-white p-5 shadow-sm">
             <CarIcon className="h-6 w-6 text-sage-500" />
-            <p className="mt-2 font-serif text-2xl font-normal text-charcoal">{activeRides.length}</p>
+            <p className="mt-2 font-serif text-2xl font-normal text-charcoal">{rides.length}</p>
             <p className="font-sans text-xs text-muted-foreground">Active Rides</p>
           </div>
           <div className="rounded-2xl bg-white p-5 shadow-sm">
@@ -55,13 +74,13 @@ export const AdminLiveMonitoring = () => {
         </div>
 
         {/* Map placeholder */}
-        <Card className="mt-6 overflow-hidden rounded-2xl border-cream-300 bg-white shadow-sm">
+        <Card className="mt-6 overflow-hidden rounded-2xl border-gray-200 bg-white shadow-sm">
           <div className="relative h-64 bg-gradient-to-br from-sage-100 to-cream-300">
             <div className="absolute inset-0 opacity-30" style={{ backgroundImage: "radial-gradient(circle at 30% 40%, #4a7c59 2px, transparent 2px), radial-gradient(circle at 70% 60%, #c66a3a 2px, transparent 2px)", backgroundSize: "50px 50px" }} />
-            {activeRides.map((ride, i) => (
+            {rides.map((ride, i) => (
               <div
                 key={ride.id}
-                className="absolute flex h-8 w-8 items-center justify-center rounded-full bg-sage-500 text-white shadow-md"
+                className="absolute flex h-8 w-8 items-center justify-center rounded-full bg-black text-white shadow-md"
                 style={{ left: `${20 + i * 20}%`, top: `${30 + (i % 2) * 30}%` }}
               >
                 <CarIcon className="h-4 w-4" />
@@ -73,10 +92,10 @@ export const AdminLiveMonitoring = () => {
         {/* Active rides table */}
         <h2 className="mt-6 font-serif text-xl font-normal text-charcoal">Active Rides</h2>
         <div className="mt-4 space-y-3">
-          {activeRides.map((ride, i) => (
+          {rides.map((ride, i) => (
             <Card
               key={ride.id}
-              className="rounded-2xl border-cream-300 bg-white shadow-sm animate-fade-up"
+              className="rounded-2xl border-gray-200 bg-white shadow-sm animate-fade-up"
               style={{ animationDelay: `${i * 0.08}s` }}
             >
               <CardContent className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">

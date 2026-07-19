@@ -7,14 +7,14 @@ const safetyCards = [
     description:
       "Share your live location and trip status with trusted contacts in one tap.",
     icon: Share2,
-    color: "bg-sage-500/10 text-sage-500",
+    color: "bg-black/10 text-sage-500",
   },
   {
     title: "Verified Drivers",
     description:
       "Every driver undergoes rigorous background checks and KYC verification.",
     icon: CheckCircle2,
-    color: "bg-sage-500/10 text-sage-500",
+    color: "bg-black/10 text-sage-500",
   },
   {
     title: "Emergency Support",
@@ -28,7 +28,7 @@ const safetyCards = [
     description:
       "Proprietary algorithms score routes based on lighting, traffic, and historical data.",
     icon: Shield,
-    color: "bg-sage-500/10 text-sage-500",
+    color: "bg-black/10 text-sage-500",
   },
 ];
 
@@ -76,7 +76,7 @@ export const SafetyPage = () => {
   return (
     <div>
       {/* Hero */}
-      <section className="bg-sage-500">
+      <section className="bg-black">
         <div className="mx-auto flex w-full max-w-screen-xl flex-col items-center px-4 py-16 text-center sm:px-6 md:py-20">
           <p className="font-sans text-sm font-bold uppercase tracking-[0.18em] text-white/70">
             SAFETY FIRST
@@ -99,7 +99,7 @@ export const SafetyPage = () => {
             return (
               <Card
                 key={feature.title}
-                className="rounded-2xl border-cream-300 bg-cream-200 shadow-sm animate-fade-up"
+                className="rounded-2xl border-gray-200 bg-cream-200 shadow-sm animate-fade-up"
                 style={{ animationDelay: `${i * 0.1}s` }}
               >
                 <CardContent className="flex h-full flex-col p-8">
@@ -137,7 +137,7 @@ export const SafetyPage = () => {
                 { n: "3", t: "Score Generation", d: "A composite score is produced and displayed alongside travel time and price so you can make an informed choice." },
               ].map((step) => (
                 <div key={step.n} className="flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sage-500 font-sans text-sm font-bold text-white">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-black font-sans text-sm font-bold text-black">
                     {step.n}
                   </div>
                   <div>
@@ -173,10 +173,10 @@ export const SafetyPage = () => {
       {/* Emergency */}
       <section className="mx-auto w-full max-w-screen-xl px-4 py-16 sm:px-6">
         <div className="rounded-3xl bg-charcoal p-8 sm:p-12">
-          <h2 className="font-serif text-3xl font-normal text-white">
+          <h2 className="font-serif text-3xl font-normal text-black">
             Emergency Resources
           </h2>
-          <p className="mt-3 font-sans text-base text-white/70">
+          <p className="mt-3 font-sans text-base text-black/70">
             If you ever feel unsafe during a ride, reach out immediately.
           </p>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -185,13 +185,13 @@ export const SafetyPage = () => {
               return (
                 <div key={contact.label} className="flex items-center gap-4 rounded-2xl bg-white/5 p-6">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10">
-                    <Icon className="h-6 w-6 text-white" />
+                    <Icon className="h-6 w-6 text-black" />
                   </div>
                   <div>
-                    <p className="font-sans text-xs font-bold uppercase tracking-wider text-white/60">
+                    <p className="font-sans text-xs font-bold uppercase tracking-wider text-black/60">
                       {contact.label}
                     </p>
-                    <p className="mt-1 font-serif text-xl font-normal text-white">{contact.value}</p>
+                    <p className="mt-1 font-serif text-xl font-normal text-black">{contact.value}</p>
                   </div>
                 </div>
               );

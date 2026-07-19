@@ -16,8 +16,8 @@ export const AdminLayout = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex min-h-screen flex-col bg-cream-100 text-charcoal">
-      <header className="sticky top-0 z-50 flex items-center justify-between border-b border-cream-300 bg-cream-100/95 px-4 py-3 backdrop-blur-md sm:px-6">
+    <div className="flex min-h-screen flex-col bg-white text-charcoal">
+      <header className="sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 bg-white/95 px-4 py-3 backdrop-blur-md sm:px-6">
         <div className="flex items-center gap-8">
           <Link to="/" className="font-serif text-xl font-semibold text-charcoal">
             SwiftRide <span className="text-sm font-sans font-bold text-terracotta-500">Admin</span>
@@ -33,7 +33,7 @@ export const AdminLayout = () => {
                   className={({ isActive }) =>
                     `flex items-center gap-2 rounded-xl px-3 py-2 font-sans text-sm font-bold transition-colors tap-scale ${
                       isActive
-                        ? "bg-sage-500 text-white"
+                        ? "bg-grey-500 text-black"
                         : "text-muted-foreground hover:bg-cream-300 hover:text-charcoal"
                     }`
                   }
@@ -51,7 +51,7 @@ export const AdminLayout = () => {
             <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-terracotta-500" />
           </button>
           <Avatar className="h-9 w-9">
-            <AvatarFallback className="bg-charcoal text-white">
+            <AvatarFallback className="bg-charcoal text-black">
               {user?.name?.split(" ").map((n) => n[0]).join("") ?? "A"}
             </AvatarFallback>
           </Avatar>
@@ -70,7 +70,7 @@ export const AdminLayout = () => {
       </header>
 
       {/* Mobile nav */}
-      <nav className="flex items-center gap-1 overflow-x-auto border-b border-cream-300 px-4 py-2 md:hidden">
+      <nav className="flex items-center gap-1 overflow-x-auto border-b border-gray-200 px-4 py-2 md:hidden">
         {adminNav.map((item) => {
           const Icon = item.icon;
           return (
@@ -81,7 +81,7 @@ export const AdminLayout = () => {
               className={({ isActive }) =>
                 `flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 font-sans text-sm font-bold transition-colors ${
                   isActive
-                    ? "bg-sage-500 text-white"
+                    ? "bg-grey-500 text-black"
                     : "text-muted-foreground hover:bg-cream-300"
                 }`
               }

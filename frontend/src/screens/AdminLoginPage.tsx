@@ -37,8 +37,8 @@ export const AdminLoginPage = () => {
     <div className="flex min-h-screen items-center justify-center bg-charcoal px-4 py-16 sm:px-6">
       <Card className="w-full max-w-md overflow-hidden rounded-2xl border-none shadow-2xl animate-scale-in">
         <div className="bg-sage-600 p-6 text-center">
-          <LayoutDashboard className="mx-auto h-12 w-12 text-white opacity-90" />
-          <h2 className="mt-4 font-serif text-2xl font-bold text-white">Admin Portal</h2>
+          <LayoutDashboard className="mx-auto h-12 w-12 text-black opacity-90" />
+          <h2 className="mt-4 font-serif text-2xl font-bold text-black">Admin Portal</h2>
           <p className="mt-1 font-sans text-sm text-sage-100">Sign in to manage SwiftRide operations</p>
         </div>
 
@@ -83,7 +83,7 @@ export const AdminLoginPage = () => {
             <Button
               type="submit"
               disabled={loading || !email || !password}
-              className="mt-4 h-auto w-full rounded-xl bg-charcoal py-4 font-sans text-base font-bold text-white shadow-md hover:bg-black disabled:opacity-50"
+              className="mt-4 h-auto w-full rounded-xl bg-black py-4 font-sans text-base font-bold text-white shadow-md hover:bg-gray-800 disabled:opacity-50"
             >
               {loading ? "Authenticating..." : "Access System"}
               {!loading && <ArrowRight className="h-5 w-5 ml-2" />}

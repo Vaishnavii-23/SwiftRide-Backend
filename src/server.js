@@ -1,12 +1,12 @@
 require('dotenv').config()
 const app = require('./app')
-const {redis} = require('./config/redis')
+const { redis } = require('./config/redis')
 const http = require('http')
 const { WebSocketServer } = require('ws')
 const jwt = require('jsonwebtoken')
 const { clients } = require('./config/websocket')
-const {scheduleSurgeUpdate} = require('./jobs/surge.job')
-const {surgeWorker} = require('./jobs/worker')
+const { scheduleSurgeUpdate } = require('./jobs/surge.job')
+const { surgeWorker } = require('./jobs/worker')
 
 
 const PORT = process.env.PORT || 3000
@@ -19,7 +19,7 @@ async function startServer() {
   const server = http.createServer(app)
   const wss = new WebSocketServer({ server })
   const heartbeat = setInterval(() => {
-  wss.clients.forEach((ws) => {
+    wss.clients.forEach((ws) => {
       if (ws.isAlive === false) {
         clients.forEach((value, key) => {
           if (value === ws) clients.delete(key)

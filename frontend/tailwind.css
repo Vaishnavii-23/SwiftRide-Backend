@@ -21,36 +21,44 @@
 /* ── Terra Design System ── */
 @layer base {
   :root {
-    --background: 40 27% 96%;
-    --foreground: 150 6% 19%;
+    --background: 0 0% 100%;
+    /* white */
+    --foreground: 0 0% 5%;
+    /* near black */
 
-    --muted: 40 16% 90%;
-    --muted-foreground: 150 4% 45%;
+    --muted: 0 0% 96%;
+    /* light gray */
+    --muted-foreground: 0 0% 45%;
+    /* medium gray */
 
     --popover: 0 0% 100%;
-    --popover-foreground: 150 6% 19%;
+    --popover-foreground: 0 0% 5%;
 
-    --border: 40 14% 85%;
-    --input: 40 14% 85%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
 
     --card: 0 0% 100%;
-    --card-foreground: 150 6% 19%;
+    --card-foreground: 0 0% 5%;
 
-    --primary: 142 23% 40%;
+    --primary: 0 0% 5%;
+    /* black buttons */
     --primary-foreground: 0 0% 100%;
+    /* white text on buttons */
 
-    --secondary: 40 16% 90%;
-    --secondary-foreground: 150 6% 19%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 5%;
 
-    --accent: 24 55% 50%;
+    --accent: 158 64% 40%;
+    /* keep green for safety */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --ring: 142 23% 40%;
+    --ring: 0 0% 5%;
 
-    --radius: 2rem;
+    --radius: 0.5rem;
+    /* less rounded, more Uber-like */
   }
 }
 
@@ -66,22 +74,41 @@
 }
 
 /* ── Staggered entrance helpers ── */
-.stagger > * {
+.stagger>* {
   opacity: 0;
   animation: fade-up 0.6s ease-out forwards;
 }
-.stagger > *:nth-child(1) { animation-delay: 0.05s; }
-.stagger > *:nth-child(2) { animation-delay: 0.12s; }
-.stagger > *:nth-child(3) { animation-delay: 0.19s; }
-.stagger > *:nth-child(4) { animation-delay: 0.26s; }
-.stagger > *:nth-child(5) { animation-delay: 0.33s; }
-.stagger > *:nth-child(6) { animation-delay: 0.40s; }
+
+.stagger>*:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.stagger>*:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.stagger>*:nth-child(3) {
+  animation-delay: 0.19s;
+}
+
+.stagger>*:nth-child(4) {
+  animation-delay: 0.26s;
+}
+
+.stagger>*:nth-child(5) {
+  animation-delay: 0.33s;
+}
+
+.stagger>*:nth-child(6) {
+  animation-delay: 0.40s;
+}
 
 @keyframes fade-up {
   from {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -92,22 +119,27 @@
 .tap-scale {
   transition: transform 0.15s ease;
 }
+
 .tap-scale:active {
   transform: scale(0.97);
 }
 
 /* ── Skeleton shimmer ── */
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    hsl(var(--muted)) 25%,
-    hsl(var(--border)) 50%,
-    hsl(var(--muted)) 75%
-  );
+  background: linear-gradient(90deg,
+      hsl(var(--muted)) 25%,
+      hsl(var(--border)) 50%,
+      hsl(var(--muted)) 75%);
   background-size: 200% 100%;
   animation: shimmer-sweep 1.5s infinite;
 }
+
 @keyframes shimmer-sweep {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
 }
