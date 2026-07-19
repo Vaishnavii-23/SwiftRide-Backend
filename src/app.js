@@ -16,7 +16,7 @@ const { globalLimiter } = require('./config/rateLimit')
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://swift-ride-backend-five.vercel.app/',
   credentials: true
 }));
 
